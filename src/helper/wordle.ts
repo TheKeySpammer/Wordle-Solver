@@ -12,18 +12,32 @@ const check_arrays_have_common_element = (arr1: string[], arr2: string[]) => {
     return _.intersection(arr1, arr2).length > 0;
 }
 
+const check_yellow_letter_not_same_position = (word:string, yellow: string[]) => {
+    for (let i = 0; i < word.length; i++) {
+        if (word[i] === yellow[i]) {
+            return false;
+        }
+    }
+    return true;
+}
+
 
 export const solveWordle = async (badLettersStr: string, guess: Array<GuessType>) => {
     const yellowLetters = guess
-    .filter((g) => g.color === 1)
-    .map((g) => g.guess);
+    .map((g) => {
+        if (g.color === 1) {
+            return g.guess.toLowerCase();
+        } else {
+            return '';
+        }
+    });
 
 
     const greenLetters = guess.map((g) => {
         if (g.color === 0) {
-            return g.guess;
+            return g.guess.toLowerCase();
         } else {
-            return "";
+            return '';
         }
     });
 
@@ -40,7 +54,7 @@ export const solveWordle = async (badLettersStr: string, guess: Array<GuessType>
     let pattern = '';
     for (let yellow of yellowLetters) {
         if (yellow.trim() !== '') {
-            pattern +=  `(?=.*?${yellow.toLowerCase()})`;
+            pattern +=  `(?=.*?${yellow})`;
         }
     }
 
@@ -48,7 +62,7 @@ export const solveWordle = async (badLettersStr: string, guess: Array<GuessType>
         if (green === '') {
             pattern += "\\w";
         } else {
-            pattern += green.toLowerCase();
+            pattern += green;
         }
     }
 
@@ -61,7 +75,7 @@ export const solveWordle = async (badLettersStr: string, guess: Array<GuessType>
         if (badLettersLength > 0 && check_arrays_have_common_element(badLetters, word.split(''))) {
             continue;
         }
-        if (regex.test(word)) {
+        if (regex.test(word) && check_yellow_letter_not_same_position(word, yellowLetters)) {
             solution.push(word);
         }
     }
@@ -71,7 +85,7 @@ export const solveWordle = async (badLettersStr: string, guess: Array<GuessType>
             if (badLettersLength > 0 && check_arrays_have_common_element(badLetters, word.split(''))) {
                 continue;
             }
-            if (regex.test(word)) {
+            if (regex.test(word) && check_yellow_letter_not_same_position(word, yellowLetters)) {
                 solution.push(word);
             }
         }

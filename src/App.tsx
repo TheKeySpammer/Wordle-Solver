@@ -5,6 +5,7 @@ import { Box, Container } from "@mui/system";
 import CssBaseline from "@mui/material/CssBaseline";
 import Typography from "@mui/material/Typography";
 import {
+    Button,
     ButtonGroup,
     FormControl,
     Grid,
@@ -16,6 +17,9 @@ import {
     TextField,
     Theme,
 } from "@mui/material";
+import ReplayIcon from '@mui/icons-material/Replay';
+import HelpIcon from '@mui/icons-material/Help';
+
 import { solveWordle, GuessType } from "./helper/wordle";
 
 const colorToThemeColor = (color: number, theme: Theme) => {
@@ -92,39 +96,45 @@ const App: React.FC = () => {
                                     Solve wordle puzzles using this simple tool.
                                 </Typography>
                             </Box>
-                            <Box sx={{ width: 150 }}>
-                                <FormControl fullWidth>
-                                    <InputLabel id="word-length-label">
-                                        Word Length
-                                    </InputLabel>
-                                    <Select
-                                        size='small'
-                                        labelId="word-length-label"
-                                        id="word-length-select"
-                                        label="Word Length"
-                                        value={wordLength}
-                                        onChange={(e) => {
-                                            setWordLength(
-                                                e.target.value as number
-                                            );
-                                            setCurrentGuess(
-                                                Array(
+                            <Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}>
+                                <Box sx={{ width: '120px' }}>
+                                    <FormControl fullWidth>
+                                        <InputLabel id="word-length-label">
+                                            Word Length
+                                        </InputLabel>
+                                        <Select
+                                            size='small'
+                                            labelId="word-length-label"
+                                            id="word-length-select"
+                                            label="Word Length"
+                                            value={wordLength}
+                                            onChange={(e) => {
+                                                setWordLength(
                                                     e.target.value as number
-                                                ).fill({ guess: "", color: 2 })
-                                            );
-                                        }}
-                                    >
-                                        <MenuItem value={5}>5</MenuItem>
-                                        <MenuItem value={6}>6</MenuItem>
-                                        <MenuItem value={7}>7</MenuItem>
-                                    </Select>
-                                </FormControl>
+                                                );
+                                                setCurrentGuess(
+                                                    Array(
+                                                        e.target.value as number
+                                                    ).fill({ guess: "", color: 2 })
+                                                );
+                                            }}
+                                        >
+                                            <MenuItem value={5}>5</MenuItem>
+                                            <MenuItem value={6}>6</MenuItem>
+                                            <MenuItem value={7}>7</MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                </Box>
+                                <Button onClick={() => {
+                                    setBadLetters("");
+                                    setCurrentGuess(Array(wordLength).fill({ guess: "", color: 2 }));
+                                }} startIcon={<ReplayIcon />}>Reset</Button>
                             </Box>
                             <Box>
                                 <Typography variant="h6">
                                     Current Guess
                                 </Typography>
-                                <Typography variant="body1">
+                                <Typography marginBottom={'8px'} variant="body1">
                                     Select guess type (Green, Gray, Yellow)
                                 </Typography>
                                 <ButtonGroup>
@@ -211,8 +221,10 @@ const App: React.FC = () => {
                                         </Box>
                                     ))}
                                 </ButtonGroup>
+                                <Box className='flex items-center'><HelpIcon className='mr-2 text-gray-400 relative' sx={{ fontSize: '16px', top: 6 }} /><Typography className='text-gray-400' marginTop={'12px'} variant="caption" display="block" >Click on the gray boxes to change the color of letters</Typography></Box>
+
                             </Box>
-                            <Box paddingTop={"8px"} paddingBottom={"8px"}>
+                            <Box paddingBottom={"8px"}>
                                 <TextField
                                     size="small"
                                     color="secondary"
