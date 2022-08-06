@@ -17,8 +17,8 @@ import {
     TextField,
     Theme,
 } from "@mui/material";
-import ReplayIcon from '@mui/icons-material/Replay';
-import HelpIcon from '@mui/icons-material/Help';
+import ReplayIcon from "@mui/icons-material/Replay";
+import HelpIcon from "@mui/icons-material/Help";
 
 import { solveWordle, GuessType } from "./helper/wordle";
 
@@ -42,7 +42,6 @@ const theme = createTheme({
  * 2 -> gray
  */
 
-
 const App: React.FC = () => {
     const [badLetters, setBadLetters] = React.useState("");
     const [wordLength, setWordLength] = React.useState(5);
@@ -50,19 +49,18 @@ const App: React.FC = () => {
         Array(5).fill({ guess: "", color: 2 })
     );
 
-    const [loading, setLoading] = React.useState(true);
     const [solution, setSolution] = React.useState<string[]>([]);
 
     React.useEffect(() => {
-        setLoading(true);
         let shouldUpdate = true;
         solveWordle(badLetters, currentGuess).then((solution) => {
             if (shouldUpdate) {
                 setSolution(solution);
-                setLoading(false);
             }
         });
-        return () => { shouldUpdate = false; }
+        return () => {
+            shouldUpdate = false;
+        };
     }, [badLetters, currentGuess]);
 
     return (
@@ -76,7 +74,7 @@ const App: React.FC = () => {
                         alignItems: "center",
                     }}
                 >
-                    <Box className='mt-8'>
+                    <Box className="mt-8">
                         <Stack spacing={4}>
                             <Box>
                                 <Typography
@@ -96,14 +94,20 @@ const App: React.FC = () => {
                                     Solve wordle puzzles using this simple tool.
                                 </Typography>
                             </Box>
-                            <Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}>
-                                <Box sx={{ width: '120px' }}>
+                            <Box
+                                sx={{
+                                    width: "100%",
+                                    display: "flex",
+                                    justifyContent: "space-between",
+                                }}
+                            >
+                                <Box sx={{ width: "120px" }}>
                                     <FormControl fullWidth>
                                         <InputLabel id="word-length-label">
                                             Word Length
                                         </InputLabel>
                                         <Select
-                                            size='small'
+                                            size="small"
                                             labelId="word-length-label"
                                             id="word-length-select"
                                             label="Word Length"
@@ -115,7 +119,10 @@ const App: React.FC = () => {
                                                 setCurrentGuess(
                                                     Array(
                                                         e.target.value as number
-                                                    ).fill({ guess: "", color: 2 })
+                                                    ).fill({
+                                                        guess: "",
+                                                        color: 2,
+                                                    })
                                                 );
                                             }}
                                         >
@@ -125,16 +132,29 @@ const App: React.FC = () => {
                                         </Select>
                                     </FormControl>
                                 </Box>
-                                <Button onClick={() => {
-                                    setBadLetters("");
-                                    setCurrentGuess(Array(wordLength).fill({ guess: "", color: 2 }));
-                                }} startIcon={<ReplayIcon />}>Reset</Button>
+                                <Button
+                                    onClick={() => {
+                                        setBadLetters("");
+                                        setCurrentGuess(
+                                            Array(wordLength).fill({
+                                                guess: "",
+                                                color: 2,
+                                            })
+                                        );
+                                    }}
+                                    startIcon={<ReplayIcon />}
+                                >
+                                    Reset
+                                </Button>
                             </Box>
                             <Box>
                                 <Typography variant="h6">
                                     Current Guess
                                 </Typography>
-                                <Typography marginBottom={'8px'} variant="body1">
+                                <Typography
+                                    marginBottom={"8px"}
+                                    variant="body1"
+                                >
                                     Select guess type (Green, Gray, Yellow)
                                 </Typography>
                                 <ButtonGroup>
@@ -165,7 +185,9 @@ const App: React.FC = () => {
                                                         let newGuess = [
                                                             ...prev,
                                                         ];
-                                                        if (value.length === 0) {
+                                                        if (
+                                                            value.length === 0
+                                                        ) {
                                                             newGuess[index] = {
                                                                 color: 2,
                                                                 guess: value,
@@ -221,8 +243,21 @@ const App: React.FC = () => {
                                         </Box>
                                     ))}
                                 </ButtonGroup>
-                                <Box className='flex items-center'><HelpIcon className='mr-2 text-gray-400 relative' sx={{ fontSize: '16px', top: 6 }} /><Typography className='text-gray-400' marginTop={'12px'} variant="caption" display="block" >Click on the gray boxes to change the color of letters</Typography></Box>
-
+                                <Box className="flex items-center">
+                                    <HelpIcon
+                                        className="mr-2 text-gray-400 relative"
+                                        sx={{ fontSize: "16px", top: 6 }}
+                                    />
+                                    <Typography
+                                        className="text-gray-400"
+                                        marginTop={"12px"}
+                                        variant="caption"
+                                        display="block"
+                                    >
+                                        Click on the gray boxes to change the
+                                        color of letters
+                                    </Typography>
+                                </Box>
                             </Box>
                             <Box paddingBottom={"8px"}>
                                 <TextField
@@ -270,9 +305,9 @@ const App: React.FC = () => {
                     <Box>
                         <Stack spacing={4}>
                             <Box>
-                                {badLetters.length === 0 ||
+                                {badLetters.length === 0 &&
                                 currentGuess.filter((g) => g.guess.length !== 0)
-                                    .length > 0 ? (
+                                    .length === 0 ? (
                                     <Typography
                                         marginTop={1}
                                         marginBottom={1}
@@ -289,96 +324,100 @@ const App: React.FC = () => {
                                         Solutions
                                     </Typography>
                                 )}
-                                {!loading && (
-                                    <Grid
-                                        container
-                                        spacing={3}
-                                        sx={{ overflow: "auto", marginTop: "2px", width: "95vw", maxWidth: "420px", overflowX: 'hidden' }}
-                                    >
-                                        <Grid item xs={3}>
-                                            <Stack spacing={"5px"}>
-                                                {solution.map((s, index) => {
-                                                    if (
-                                                        index <
-                                                        solution.length / 4
-                                                    ) {
-                                                        return (
-                                                            <Typography key={index}>
-                                                                {s}
-                                                            </Typography>
-                                                        );
-                                                    } else {
-                                                        return null;
-                                                    }
-                                                })}
-                                            </Stack>
-                                        </Grid>
-                                        <Grid item xs={3}>
-                                            <Stack spacing={"5px"}>
-                                                {solution.map((s, index) => {
-                                                    if (
-                                                        index >=
-                                                            solution.length / 4 &&
-                                                        index <
-                                                            (solution.length * 2) /
-                                                                4
-                                                    ) {
-                                                        return (
-                                                            <Typography key={index}>
-                                                                {s}
-                                                            </Typography>
-                                                        );
-                                                    } else {
-                                                        return null;
-                                                    }
-                                                })}
-                                            </Stack>
-                                        </Grid>
-                                        <Grid item xs={3}>
-                                            <Stack spacing={"5px"}>
-                                                {solution.map((s, index) => {
-                                                    if (
-                                                        index >=
-                                                            (solution.length * 2) /
-                                                                4 &&
-                                                        index <
-                                                            (solution.length * 3) /
-                                                                4
-                                                    ) {
-                                                        return (
-                                                            <Typography key={index}>
-                                                                {s}
-                                                            </Typography>
-                                                        );
-                                                    } else {
-                                                        return null;
-                                                    }
-                                                })}
-                                            </Stack>
-                                        </Grid>
-                                        <Grid item xs={3}>
-                                            <Stack spacing={"5px"}>
-                                                {solution.map((s, index) => {
-                                                    if (
-                                                        index >=
-                                                            (solution.length * 3) /
-                                                                4 &&
-                                                        index < solution.length
-                                                    ) {
-                                                        return (
-                                                            <Typography key={index}>
-                                                                {s}
-                                                            </Typography>
-                                                        );
-                                                    } else {
-                                                        return null;
-                                                    }
-                                                })}
-                                            </Stack>
-                                        </Grid>
+
+                                <Grid
+                                    container
+                                    spacing={3}
+                                    sx={{
+                                        overflow: "auto",
+                                        marginTop: "2px",
+                                        width: "95vw",
+                                        maxWidth: "420px",
+                                        overflowX: "hidden",
+                                    }}
+                                >
+                                    <Grid item xs={3}>
+                                        <Stack spacing={"5px"}>
+                                            {solution.map((s, index) => {
+                                                if (
+                                                    index <
+                                                    solution.length / 4
+                                                ) {
+                                                    return (
+                                                        <Typography key={index}>
+                                                            {s}
+                                                        </Typography>
+                                                    );
+                                                } else {
+                                                    return null;
+                                                }
+                                            })}
+                                        </Stack>
                                     </Grid>
-                                )}
-                                {loading && <LinearProgress />}
+                                    <Grid item xs={3}>
+                                        <Stack spacing={"5px"}>
+                                            {solution.map((s, index) => {
+                                                if (
+                                                    index >=
+                                                        solution.length / 4 &&
+                                                    index <
+                                                        (solution.length * 2) /
+                                                            4
+                                                ) {
+                                                    return (
+                                                        <Typography key={index}>
+                                                            {s}
+                                                        </Typography>
+                                                    );
+                                                } else {
+                                                    return null;
+                                                }
+                                            })}
+                                        </Stack>
+                                    </Grid>
+                                    <Grid item xs={3}>
+                                        <Stack spacing={"5px"}>
+                                            {solution.map((s, index) => {
+                                                if (
+                                                    index >=
+                                                        (solution.length * 2) /
+                                                            4 &&
+                                                    index <
+                                                        (solution.length * 3) /
+                                                            4
+                                                ) {
+                                                    return (
+                                                        <Typography key={index}>
+                                                            {s}
+                                                        </Typography>
+                                                    );
+                                                } else {
+                                                    return null;
+                                                }
+                                            })}
+                                        </Stack>
+                                    </Grid>
+                                    <Grid item xs={3}>
+                                        <Stack spacing={"5px"}>
+                                            {solution.map((s, index) => {
+                                                if (
+                                                    index >=
+                                                        (solution.length * 3) /
+                                                            4 &&
+                                                    index < solution.length
+                                                ) {
+                                                    return (
+                                                        <Typography key={index}>
+                                                            {s}
+                                                        </Typography>
+                                                    );
+                                                } else {
+                                                    return null;
+                                                }
+                                            })}
+                                        </Stack>
+                                    </Grid>
+                                </Grid>
                             </Box>
                         </Stack>
                     </Box>
