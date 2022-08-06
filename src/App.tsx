@@ -10,7 +10,6 @@ import {
     FormControl,
     Grid,
     InputLabel,
-    LinearProgress,
     MenuItem,
     Select,
     Stack,
