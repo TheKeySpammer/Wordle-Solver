@@ -43,9 +43,9 @@ export const solveWordle = async (badLettersStr: string, guess: Array<GuessType>
 
     let badLetters = badLettersStr
         .split("")
-        .filter((l) => l.trim() !== "" && !isNaN(parseInt(l) ) && !yellowLetters.includes(l.toLowerCase()) && !greenLetters.includes(l.toLowerCase()) )
-        .map((l) => l.trim().toLowerCase());
-
+        .map((l) => l.trim().toLowerCase())
+        .filter((l) => l !== "" && isNaN(parseInt(l)) && !yellowLetters.includes(l.toLowerCase()) && !greenLetters.includes(l.toLowerCase()) )
+        
 
 
     let words = CommonWords;
